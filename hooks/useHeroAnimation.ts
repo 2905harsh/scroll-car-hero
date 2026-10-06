@@ -5,7 +5,7 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 const PAD = 16; // car inset from the left/right edges (px)
 const REVEAL = 60; // px of car travel an item takes to fully appear
-const GHOST = 0; // opacity before reveal. 0 = hidden; try 0.12 for a faint headline and stats on load
+const GHOST = 0.15; // opacity before reveal. 0 = hidden; try 0.12 for a faint headline and stats on load
 const SCROLL_LENGTH = { desktop: "+=150%", mobile: "+=120%" };
 
 /**
@@ -93,10 +93,10 @@ export function useHeroAnimation(scope: RefObject<HTMLElement | null>) {
             .from(road, { scaleX: 0, duration: 1.1 })
             .from(car, { opacity: 0, scale: 0.92, duration: 0.8 }, 0.25);
           if (GHOST > 0) {
-            intro
-              .to(letters, { opacity: GHOST, duration: 0.6, stagger: 0.04 }, 0.5)
-              .to(stats, { opacity: GHOST, duration: 0.6, stagger: 0.15 }, 1.0);
-          }
+  intro
+    .fromTo(letters, { opacity: 0, y: 28 }, { opacity: GHOST, y: 14, duration: 0.8, stagger: 0.05 }, 0.5)
+    .fromTo(stats, { opacity: 0, y: 32 }, { opacity: GHOST, y: 18, duration: 0.8, stagger: 0.15 }, 1.0);
+}
         }
       }, root);
     };

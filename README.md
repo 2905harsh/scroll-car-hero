@@ -22,7 +22,7 @@ Pushes to `main` deploy automatically to GitHub Pages via GitHub Actions (`.gith
 | Requirement | Where |
 |---|---|
 | Letter-spaced headline and stats above the fold | `components/Hero.tsx` |
-| Load animation | The road draws in and the car fades up (`playIntro` in the hook) |
+| Load animation | Road draws in, car fades up, then headline letters and stats stagger in (`playIntro` in the hook) |
 | Scroll-linked motion with easing | Pinned ScrollTrigger timeline with `scrub: 1` |
 | Transforms only | `x`, `y`, `scale`, `opacity`; no layout properties are animated |
 | No layout work on scroll | Positions are measured once per build, not in a scroll handler |
@@ -36,8 +36,8 @@ All of it lives in `hooks/useHeroAnimation.ts`.
 - **One pinned timeline.** ScrollTrigger pins the hero and maps scroll distance to timeline progress (0 to 1) with `scrub: 1`, which adds the smoothing.
 - **The car owns the clock.** Its `x` tween spans the whole timeline with `ease: "none"`, so progress equals position.
 - **Reveals follow the car.** Each letter and stat is measured once, then placed on the timeline at the progress where the car's nose reaches it. Letters rise and fade in. Stats rise, fade in, and count up from 0.
-- **Clean first frame.** Nothing reveals until the car actually moves, so the page opens on the car and the road only. This is by design: the headline and stats are revealed by the car on scroll.
-- **Load intro.** The road draws in, then the car fades up onto it. This plays once.
+- **Load intro.** The road draws in and the car fades up. Then the headline letters and the four stats fade in faintly, one by one. This plays once.
+- **Scroll reveal.** Nothing brightens until the car moves. As its nose passes each letter and stat, that item rises to full opacity, and the stats count up from 0.
 - **Performance.** Only `x`, `y`, `scale`, and `opacity` are animated. Layout is measured once per build, never inside the scroll handler.
 - **Resize.** Positions are measured from the DOM, so the timeline is rebuilt (debounced) when the width changes. Mobile address-bar resizes are ignored.
 - **Reduced motion.** With `prefers-reduced-motion`, the final state renders with no animation.
@@ -53,4 +53,4 @@ lib/gsap.ts     one-time plugin registration
 
 ## Tuning
 
-Constants at the top of the hook: `PAD`, `REVEAL`, `GHOST`, `SCROLL_LENGTH`. Set `GHOST` to `0.12` to show a faint headline and stats on load.
+Constants at the top of the hook: `PAD`, `REVEAL`, `GHOST`, `SCROLL_LENGTH`. `GHOST` is the opacity of the headline and stats on load (currently `0.15`). Set it to `0` to keep them hidden until the car reaches them.
